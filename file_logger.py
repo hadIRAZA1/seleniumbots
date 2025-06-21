@@ -1,42 +1,76 @@
 import logging
-import uuid
-from pythonjsonlogger import jsonlogger
-from datetime import datetime
-import os # Import os module
+import json
+import os
+import time
 
-# Define LOG_FILE relative to your project's root, inside a 'logs' directory
-LOG_FILE = os.path.join("logs", "automation_logs.jsonl")
-
-def get_logger(script_name):
+class JsonFormatter(logging.Formatter):
     """
-    Sets up a logger to write structured JSON to a file.
+    A custom formatter to output log records as JSON lines.
     """
-    logger = logging.getLogger(script_name)
-    logger.setLevel(logging.INFO)
+    def format(self, record):
+        log_entry = {
+            "timestamp": time.time(), # Unix timestamp
+            "level": record.levelname,
+            "script_name": getattr(record, 'script_name', 'UNKNOWN'), # Custom attribute for script name
+            "message": record.getMessage(),
+        }
+
+        # Add extra attributes if they exist
+        if hasattr(record, 'status'):
+            log_entry['status'] = record.status
+        if hasattr(record, 'screenshot'):
+            log_entry['screenshot'] = record.screenshot
+        if record.exc_info:
+            # Format exception traceback if present
+            log_entry['traceback'] = self.formatException(record.exc_info)
+        
+        return json.dumps(log_entry)
+
+def get_logger(script_name="default", log_file_name="automation_logs_jsonl"):
+    """
+    Configures and returns a logger instance for a specific script.
+    It ensures only one FileHandler is added to the root logger for the JSONL file.
+    """
+    logger = logging.getLogger() # Get the root logger
+    logger.setLevel(logging.INFO) # Set global logging level to INFO or DEBUG to capture all messages
+
+    # Prevent duplicate handlers if get_logger is called multiple times
+    if not any(isinstance(handler, logging.FileHandler) and handler.baseFilename.endswith(log_file_name) for handler in logger.handlers):
+        # *** THIS IS THE CRITICAL LINE THAT NEEDS TO BE "public" ***
+        log_dir = "public" # Changed from "logs" to "public"
+        # **********************************************************
+        if not os.path.exists(log_dir):
+            os.makedirs(log_dir)
+        
+        log_path = os.path.join(log_dir, log_file_name)
+
+        file_handler = logging.FileHandler(log_path, mode='a', encoding='utf-8')
+        file_handler.setFormatter(JsonFormatter())
+        logger.addHandler(file_handler)
+
+        # Optional: Add a StreamHandler to see logs in console during development
+        if not any(isinstance(handler, logging.StreamHandler) for handler in logger.handlers):
+            stream_handler = logging.StreamHandler()
+            stream_handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
+            logger.addHandler(stream_handler)
+
+    script_logger = logging.getLogger(script_name)
+    script_logger.setLevel(logging.INFO) 
     
-    # Prevent logs from being propagated to the root logger
-    logger.propagate = False
+    return script_logger
 
-    # Ensure the log directory exists
-    log_dir = os.path.dirname(LOG_FILE)
-    if log_dir and not os.path.exists(log_dir): # Check if log_dir is not empty string
-        os.makedirs(log_dir, exist_ok=True)
+# Example usage (for testing file_logger.py directly)
+if __name__ == "__main__":
+    test_logger1 = get_logger(script_name="TestScript1")
+    test_logger1.info("This is an info message from TestScript1.")
+    test_logger1.warning("This is a warning from TestScript1.", extra={'status': 'PENDING'})
+    try:
+        raise ValueError("Something went wrong in TestScript1!")
+    except ValueError:
+        test_logger1.error("An error occurred!", exc_info=True, extra={'screenshot': 'error_screenshot.png'})
 
-    # Use a file handler to write to our log file
-    log_handler = logging.FileHandler(LOG_FILE)
+    test_logger2 = get_logger(script_name="TestScript2")
+    test_logger2.debug("This debug message might not show if root level is INFO.")
+    test_logger2.info("Another info message from TestScript2.")
 
-    # Create a unique ID for each run of the script
-    run_id = str(uuid.uuid4())
-
-    # Use a custom JSON formatter
-    formatter = jsonlogger.JsonFormatter(
-        '%(asctime)s %(name)s %(levelname)s %(message)s'
-    )
-    log_handler.setFormatter(formatter)
-
-    # Add the handler to the logger if it doesn't have one already
-    if not logger.handlers:
-        logger.addHandler(log_handler)
-    
-    # Return a logger instance that includes the run_id in each message
-    return logging.LoggerAdapter(logger, {'run_id': run_id})
+    print(f"Log file '{os.path.join('public', 'automation_logs_jsonl')}' should be updated.")
