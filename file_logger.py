@@ -36,10 +36,15 @@ def get_logger(script_name="default", log_file_name="automation_logs_jsonl"):
 
     # Prevent duplicate handlers if get_logger is called multiple times
     if not any(isinstance(handler, logging.FileHandler) and handler.baseFilename.endswith(log_file_name) for handler in logger.handlers):
-        # *** THIS IS THE CRITICAL LINE THAT NEEDS TO BE "public" ***
-        log_dir = "public" # Changed from "logs" to "public"
-        # **********************************************************
-        if not os.path.exists(log_dir):
+        # --- CHANGE IS HERE ---
+        # Set log_dir to an empty string to put the file in the current working directory
+        log_dir = "" 
+        # ----------------------
+        
+        # Note: No need to os.makedirs(log_dir) if it's an empty string,
+        # as it refers to the current directory which already exists.
+        # However, for consistency with previous versions, you can keep the check.
+        if log_dir and not os.path.exists(log_dir): # Added 'if log_dir' check
             os.makedirs(log_dir)
         
         log_path = os.path.join(log_dir, log_file_name)
@@ -73,4 +78,4 @@ if __name__ == "__main__":
     test_logger2.debug("This debug message might not show if root level is INFO.")
     test_logger2.info("Another info message from TestScript2.")
 
-    print(f"Log file '{os.path.join('public', 'automation_logs_jsonl')}' should be updated.")
+    print(f"Log file '{os.path.join('', 'automation_logs_jsonl')}' should be updated.")
