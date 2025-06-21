@@ -6,8 +6,8 @@ import time
 import sys
 import pandas as pd # Import pandas for DataFrame
 
-# --- MODIFIED: Use the absolute path provided by the user ---
-LOG_FILE_PATH = r"C:\Users\HP\sele\logs\automation_logs.jsonl"
+# --- MODIFIED: Use a relative path consistent with file_logger.py ---
+LOG_FILE_PATH = os.path.join("logs", "automation_logs.jsonl")
 LOG_DIR = os.path.dirname(LOG_FILE_PATH)
 if not os.path.exists(LOG_DIR):
     os.makedirs(LOG_DIR, exist_ok=True)
@@ -161,17 +161,17 @@ def read_and_display_logs():
     for entry in log_entries_raw:
         timestamp_str = entry.get('asctime', entry.get('timestamp', 'N/A'))
         # Format timestamp to show only time and maybe date if needed, otherwise just time
-        if 'T' in timestamp_str and '.' in timestamp_str: # ISO format
+        if 'T' in timestamp_str and '.' in timestamp_str: # ISO format (e.g., from Streamlit logs)
             display_time = timestamp_str.split('T')[1].split('.')[0] # HH:MM:SS
             display_date = timestamp_str.split('T')[0]
-        else: # Standard log format
+        else: # Standard log format (e.g., from your file_logger)
             # Example: '2023-10-27 10:30:00,123' -> '10:30:00'
             parts = timestamp_str.split(' ')
-            if len(parts) > 1:
+            if len(parts) > 1 and ',' in parts[1]: # Check for comma in time part
                 display_time = parts[1].split(',')[0]
                 display_date = parts[0]
-            else:
-                display_time = timestamp_str # Fallback if format is unexpected
+            else: # Fallback for unexpected formats
+                display_time = timestamp_str
                 display_date = "N/A"
         
         # Combine date and time if desired, or keep separate
@@ -203,8 +203,10 @@ def read_and_display_logs():
             timestamp_str = entry_detail.get('asctime', entry_detail.get('timestamp', 'N/A'))
             if 'T' in timestamp_str and '.' in timestamp_str:
                 st.text(f"[{timestamp_str.split('T')[1].split('.')[0]}]")
+            elif ' ' in timestamp_str and ',' in timestamp_str: # Handles your local logger format
+                st.text(f"[{timestamp_str.split(' ')[1].split(',')[0]}]")
             else:
-                st.text(f"[{timestamp_str.split(' ')[1].split(',')[0] if ' ' in timestamp_str else timestamp_str}]") # show HH:MM:SS
+                st.text(f"[{timestamp_str}]")
         with col2:
             level = entry_detail.get('levelname', 'INFO').upper()
             level_color = "green"
