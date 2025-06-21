@@ -6,9 +6,17 @@ import time
 import sys
 import pandas as pd # Import pandas for DataFrame
 
-# --- MODIFIED: Use a relative path consistent with file_logger.py ---
-LOG_FILE_PATH = os.path.join("logs", "automation_logs.jsonl")
-LOG_DIR = os.path.dirname(LOG_FILE_PATH)
+# --- MODIFIED: Use an absolute path relative to the script's location ---
+# Get the absolute path of the directory where this script (app.py) is located
+APP_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# Define the log directory path relative to the app's directory
+LOG_DIR = os.path.join(APP_DIR, "logs")
+
+# Define the full log file path
+LOG_FILE_PATH = os.path.join(LOG_DIR, "automation_logs.jsonl")
+
+# Create the log directory if it doesn't exist
 if not os.path.exists(LOG_DIR):
     os.makedirs(LOG_DIR, exist_ok=True)
 # --- END MODIFIED ---
@@ -30,7 +38,8 @@ def run_script(script_name, log_placeholder=None):
     current_output_placeholder = log_placeholder if log_placeholder else st.empty()
     
     try:
-        script_dir = os.path.dirname(os.path.abspath(__file__))
+        # The script_dir is now the same as APP_DIR, ensuring consistency.
+        script_dir = APP_DIR 
         
         process = subprocess.Popen(
             [sys.executable, "-u", os.path.join(script_dir, script_name)],
@@ -247,13 +256,15 @@ if st.button("Clear All Logs"):
         try:
             os.remove(LOG_FILE_PATH)
             st.success(f"Logs cleared successfully from `{LOG_FILE_PATH}`.")
+            # This logic is now safer as LOG_DIR is well-defined
             if os.path.exists(LOG_DIR) and not os.listdir(LOG_DIR):
                 os.rmdir(LOG_DIR)
         except Exception as e:
             st.error(f"Error clearing logs: {e}")
     else:
         st.info("No log file to clear.")
-    read_and_display_logs()
+    # Use st.experimental_rerun() for a cleaner refresh
+    st.experimental_rerun()
 
 st.markdown("---")
 
@@ -279,4 +290,5 @@ st.markdown("---")
 read_and_display_logs()
 
 if st.button("Refresh Logs"):
-    read_and_display_logs()
+    # Use st.experimental_rerun() to refresh the whole app state and log display
+    st.experimental_rerun()
