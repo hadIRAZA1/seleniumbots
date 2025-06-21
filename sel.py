@@ -7,6 +7,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
 import time
 import traceback
+import logging # Ensure logging module is imported for getLogger
 from file_logger import get_logger # Import the new logger
 
 BASE_URL = "https://seeqlo-dev.vercel.app"
@@ -117,6 +118,10 @@ def main():
     """Main function to initialize Selenium and run the automation."""
     driver = None
     try:
+        # Configure external loggers to suppress verbose output
+        logging.getLogger('webdriver_manager').setLevel(logging.WARNING)
+        logging.getLogger('urllib3').setLevel(logging.WARNING)
+
         driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
         driver.maximize_window()
         email = "ibadt@gmail.com"
