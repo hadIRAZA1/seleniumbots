@@ -26,31 +26,44 @@ class JsonFormatter(logging.Formatter):
         
         return json.dumps(log_entry)
 
+class NoisyLoggerFilter(logging.Filter):
+    """
+    A filter to exclude log records from specific noisy loggers.
+    """
+    def __init__(self, name=''):
+        super().__init__(name)
+        # List of logger names to filter out
+        self.exclude_loggers = ['webdriver_manager', 'urllib3']
+
+    def filter(self, record):
+        # Return False if the record's logger name starts with any of the excluded names,
+        # effectively dropping the log record.
+        for exclude_name in self.exclude_loggers:
+            if record.name.startswith(exclude_name):
+                return False
+        return True # Allow other log records to pass
+
 def get_logger(script_name="default", log_file_name="automation_logs_jsonl"):
     """
     Configures and returns a logger instance for a specific script.
     It ensures only one FileHandler is added to the root logger for the JSONL file.
     """
     logger = logging.getLogger() # Get the root logger
-    logger.setLevel(logging.INFO) # Set global logging level to INFO or DEBUG to capture all messages
+    logger.setLevel(logging.INFO) # Set global logging level to INFO (or DEBUG for more verbosity)
 
     # Prevent duplicate handlers if get_logger is called multiple times
     if not any(isinstance(handler, logging.FileHandler) and handler.baseFilename.endswith(log_file_name) for handler in logger.handlers):
-        # --- CHANGE IS HERE ---
         # Set log_dir to an empty string to put the file in the current working directory
         log_dir = "" 
-        # ----------------------
         
-        # Note: No need to os.makedirs(log_dir) if it's an empty string,
-        # as it refers to the current directory which already exists.
-        # However, for consistency with previous versions, you can keep the check.
-        if log_dir and not os.path.exists(log_dir): # Added 'if log_dir' check
+        if log_dir and not os.path.exists(log_dir):
             os.makedirs(log_dir)
         
         log_path = os.path.join(log_dir, log_file_name)
 
         file_handler = logging.FileHandler(log_path, mode='a', encoding='utf-8')
         file_handler.setFormatter(JsonFormatter())
+        file_handler.addFilter(NoisyLoggerFilter()) # Add the filter to the file handler
         logger.addHandler(file_handler)
 
         # Optional: Add a StreamHandler to see logs in console during development
@@ -78,4 +91,13 @@ if __name__ == "__main__":
     test_logger2.debug("This debug message might not show if root level is INFO.")
     test_logger2.info("Another info message from TestScript2.")
 
-    print(f"Log file '{os.path.join('', 'automation_logs_jsonl')}' should be updated.")
+    # These messages from 'webdriver_manager' and 'urllib3' should NOT appear in automation_logs_jsonl
+    # but might appear in console if stream_handler is configured to allow them.
+    noisy_logger_wdm = logging.getLogger('webdriver_manager.test_component')
+    noisy_logger_wdm.info("This is a simulated WDM info log.")
+    noisy_logger_wdm.debug("This is a simulated WDM debug log.") # Will not show due to root logger level
+
+    noisy_logger_urllib = logging.getLogger('urllib3.connectionpool')
+    noisy_logger_urllib.info("This is a simulated urllib3 info log.")
+
+    print(f"Log file '{os.path.join('', 'automation_logs_jsonl')}' should be updated, EXCLUDING WDM/urllib3 messages.")
