@@ -1,3 +1,11 @@
+try:
+    from loguru import logger
+    logger.remove()
+except ImportError:
+    pass
+import logging 
+logging.getLogger("webdriver_manager").disabled = True
+logging.getLogger("urllib3").disabled = True
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager

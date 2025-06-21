@@ -3,101 +3,88 @@ import json
 import os
 import time
 
+# === JSON LOG FORMATTER ===
 class JsonFormatter(logging.Formatter):
-    """
-    A custom formatter to output log records as JSON lines.
-    """
     def format(self, record):
         log_entry = {
-            "timestamp": time.time(), # Unix timestamp
+            "timestamp": time.time(),
             "level": record.levelname,
-            "script_name": getattr(record, 'script_name', 'UNKNOWN'), # Custom attribute for script name
+            "script_name": getattr(record, 'script_name', 'UNKNOWN'),
             "message": record.getMessage(),
         }
-
-        # Add extra attributes if they exist
         if hasattr(record, 'status'):
             log_entry['status'] = record.status
         if hasattr(record, 'screenshot'):
             log_entry['screenshot'] = record.screenshot
         if record.exc_info:
-            # Format exception traceback if present
             log_entry['traceback'] = self.formatException(record.exc_info)
-        
-        return json.dumps(log_entry)
+        return json.dumps(log_entry, ensure_ascii=False, indent=2)
 
+
+# === FILTER TO REMOVE NOISY MODULES (webdriver_manager, urllib3) ===
 class NoisyLoggerFilter(logging.Filter):
-    """
-    A filter to exclude log records from specific noisy loggers.
-    """
-    def __init__(self, name=''):
-        super().__init__(name)
-        # List of logger names to filter out
+    def __init__(self):
+        super().__init__()
         self.exclude_loggers = ['webdriver_manager', 'urllib3']
 
     def filter(self, record):
-        # Return False if the record's logger name starts with any of the excluded names,
-        # effectively dropping the log record.
-        for exclude_name in self.exclude_loggers:
-            if record.name.startswith(exclude_name):
-                return False
-        return True # Allow other log records to pass
+        return not any(record.name.startswith(name) for name in self.exclude_loggers)
 
+
+def suppress_noisy_loggers():
+    """Disable noisy external loggers completely."""
+    for logger_name in ['webdriver_manager', 'urllib3']:
+        noisy_logger = logging.getLogger(logger_name)
+        noisy_logger.setLevel(logging.CRITICAL + 1)
+        noisy_logger.propagate = False
+
+
+# === LOGGER SETUP FUNCTION ===
 def get_logger(script_name="default", log_file_name="automation_logs_jsonl"):
-    """
-    Configures and returns a logger instance for a specific script.
-    It ensures only one FileHandler is added to the root logger for the JSONL file.
-    """
-    logger = logging.getLogger() # Get the root logger
-    logger.setLevel(logging.INFO) # Set global logging level to INFO (or DEBUG for more verbosity)
+    suppress_noisy_loggers()
 
-    # Prevent duplicate handlers if get_logger is called multiple times
-    if not any(isinstance(handler, logging.FileHandler) and handler.baseFilename.endswith(log_file_name) for handler in logger.handlers):
-        # Set log_dir to an empty string to put the file in the current working directory
-        log_dir = "" 
-        
-        if log_dir and not os.path.exists(log_dir):
-            os.makedirs(log_dir)
-        
-        log_path = os.path.join(log_dir, log_file_name)
+    logger = logging.getLogger()
+    logger.setLevel(logging.INFO)
 
+    log_dir = ""  # Customize if needed
+    log_path = os.path.join(log_dir, log_file_name)
+
+    # File Handler: Write structured JSON logs
+    if not any(isinstance(h, logging.FileHandler) and h.baseFilename.endswith(log_file_name) for h in logger.handlers):
         file_handler = logging.FileHandler(log_path, mode='a', encoding='utf-8')
         file_handler.setFormatter(JsonFormatter())
-        file_handler.addFilter(NoisyLoggerFilter()) # Add the filter to the file handler
+        file_handler.addFilter(NoisyLoggerFilter())
         logger.addHandler(file_handler)
 
-        # Optional: Add a StreamHandler to see logs in console during development
-        if not any(isinstance(handler, logging.StreamHandler) for handler in logger.handlers):
-            stream_handler = logging.StreamHandler()
-            stream_handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
-            logger.addHandler(stream_handler)
+    # Console Handler: Colorful readable logs
+    if not any(isinstance(h, logging.StreamHandler) for h in logger.handlers):
+        stream_handler = logging.StreamHandler()
+        stream_handler.setFormatter(logging.Formatter(
+            "\033[1;34m%(asctime)s\033[0m - \033[1;32m%(name)s\033[0m - \033[1;33m%(levelname)s\033[0m - %(message)s"
+        ))
+        stream_handler.addFilter(NoisyLoggerFilter())
+        logger.addHandler(stream_handler)
 
+    # Return script-specific logger
     script_logger = logging.getLogger(script_name)
-    script_logger.setLevel(logging.INFO) 
-    
+    script_logger.setLevel(logging.INFO)
     return script_logger
 
-# Example usage (for testing file_logger.py directly)
+
+# === TEST CASE ===
 if __name__ == "__main__":
-    test_logger1 = get_logger(script_name="TestScript1")
-    test_logger1.info("This is an info message from TestScript1.")
-    test_logger1.warning("This is a warning from TestScript1.", extra={'status': 'PENDING'})
+    log = get_logger("TestScript")
+
+    log.info("🔵 This is an info message.")
+    log.warning("🟡 This is a warning.", extra={'status': 'PENDING'})
+
     try:
-        raise ValueError("Something went wrong in TestScript1!")
-    except ValueError:
-        test_logger1.error("An error occurred!", exc_info=True, extra={'screenshot': 'error_screenshot.png'})
+        raise ValueError("🚨 Simulated error!")
+    except Exception:
+        log.error("🔴 An error occurred!", exc_info=True, extra={'screenshot': 'error_screenshot.png'})
 
-    test_logger2 = get_logger(script_name="TestScript2")
-    test_logger2.debug("This debug message might not show if root level is INFO.")
-    test_logger2.info("Another info message from TestScript2.")
+    # Verify noisy loggers are suppressed
+    logging.getLogger('webdriver_manager.driver').info("This should NOT appear.")
+    logging.getLogger('urllib3.connectionpool').info("This should also NOT appear.")
 
-    # These messages from 'webdriver_manager' and 'urllib3' should NOT appear in automation_logs_jsonl
-    # but might appear in console if stream_handler is configured to allow them.
-    noisy_logger_wdm = logging.getLogger('webdriver_manager.test_component')
-    noisy_logger_wdm.info("This is a simulated WDM info log.")
-    noisy_logger_wdm.debug("This is a simulated WDM debug log.") # Will not show due to root logger level
-
-    noisy_logger_urllib = logging.getLogger('urllib3.connectionpool')
-    noisy_logger_urllib.info("This is a simulated urllib3 info log.")
-
-    print(f"Log file '{os.path.join('', 'automation_logs_jsonl')}' should be updated, EXCLUDING WDM/urllib3 messages.")
+    print(f"✅ Log file saved as: {os.path.join(log_dir, log_file_name)}")
