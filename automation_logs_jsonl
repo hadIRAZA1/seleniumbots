@@ -1,50 +1,22 @@
-{"timestamp": 1750536896.1431434, "level": "INFO", "script_name": "UNKNOWN", "message": "====== WebDriver manager ======"}
-{"timestamp": 1750536898.4250524, "level": "INFO", "script_name": "UNKNOWN", "message": "Get LATEST chromedriver version for google-chrome"}
-{"timestamp": 1750536898.858359, "level": "INFO", "script_name": "UNKNOWN", "message": "Get LATEST chromedriver version for google-chrome"}
-{"timestamp": 1750536899.2321506, "level": "INFO", "script_name": "UNKNOWN", "message": "Get LATEST chromedriver version for google-chrome"}
-{"timestamp": 1750536900.1058717, "level": "INFO", "script_name": "UNKNOWN", "message": "WebDriver version 137.0.7151.119 selected"}
-{"timestamp": 1750536900.1129463, "level": "INFO", "script_name": "UNKNOWN", "message": "Modern chrome version https://storage.googleapis.com/chrome-for-testing-public/137.0.7151.119/win32/chromedriver-win32.zip"}
-{"timestamp": 1750536900.1129463, "level": "INFO", "script_name": "UNKNOWN", "message": "About to download new driver from https://storage.googleapis.com/chrome-for-testing-public/137.0.7151.119/win32/chromedriver-win32.zip"}
-{"timestamp": 1750536900.3093307, "level": "INFO", "script_name": "UNKNOWN", "message": "Driver downloading response is 200"}
-{"timestamp": 1750536910.7920988, "level": "INFO", "script_name": "UNKNOWN", "message": "Get LATEST chromedriver version for google-chrome"}
-{"timestamp": 1750536911.3772619, "level": "INFO", "script_name": "UNKNOWN", "message": "Driver has been saved in cache [C:\\Users\\HP\\.wdm\\drivers\\chromedriver\\win64\\137.0.7151.119]"}
-{"timestamp": 1750536914.4193983, "level": "INFO", "script_name": "UNKNOWN", "message": "\u25b6 Starting login process..."}
-{"timestamp": 1750536914.693709, "level": "INFO", "script_name": "UNKNOWN", "message": "\u2709 Entering email..."}
-{"timestamp": 1750536918.2821684, "level": "INFO", "script_name": "UNKNOWN", "message": "\ud83d\udd11 Entering password..."}
-{"timestamp": 1750536918.4300544, "level": "INFO", "script_name": "UNKNOWN", "message": "-> Clicking login button..."}
-{"timestamp": 1750536918.5565228, "level": "INFO", "script_name": "UNKNOWN", "message": "\ud83d\udd10 Logged in, waiting for dashboard to load..."}
-{"timestamp": 1750536922.7630632, "level": "INFO", "script_name": "UNKNOWN", "message": "\u2705 Login successful, dashboard loaded."}
-{"timestamp": 1750536922.76377, "level": "INFO", "script_name": "UNKNOWN", "message": "\n\ud83d\udda5\ufe0f Navigating to 'My Desk' section..."}
-{"timestamp": 1750536922.9118514, "level": "INFO", "script_name": "UNKNOWN", "message": "\u2705 Clicked on My Desk sidebar link."}
-{"timestamp": 1750536924.912409, "level": "INFO", "script_name": "UNKNOWN", "message": "\n\ud83d\udc1d Clicking on 'Spelling Bee' activity..."}
-{"timestamp": 1750536925.0367615, "level": "INFO", "script_name": "UNKNOWN", "message": "\u2705 Clicked on Spelling Bee activity."}
-{"timestamp": 1750536927.0374491, "level": "INFO", "script_name": "UNKNOWN", "message": "\n\ud83d\udd0e Handling 'Class' dropdown..."}
-{"timestamp": 1750536927.1853673, "level": "INFO", "script_name": "UNKNOWN", "message": "\ud83c\udf93 Class 'math grade 5 (2 students)' selected successfully."}
-{"timestamp": 1750536928.1858833, "level": "INFO", "script_name": "UNKNOWN", "message": "\n\ud83d\udd0e Handling 'Difficulty' dropdown..."}
-{"timestamp": 1750536928.280473, "level": "INFO", "script_name": "UNKNOWN", "message": "\ud83d\udcd8 Difficulty 'Grade 4-6 (Medium)' selected successfully."}
-{"timestamp": 1750536929.2808433, "level": "INFO", "script_name": "UNKNOWN", "message": "\n\ud83d\ude80 Clicking 'Assign to Class' button..."}
-{"timestamp": 1750536929.3654463, "level": "INFO", "script_name": "UNKNOWN", "message": "\u2705 Assignment successfully created!"}
-{"timestamp": 1750536932.3662052, "level": "INFO", "script_name": "UNKNOWN", "message": "\ud83c\udfaf Automation script finished successfully.", "status": "COMPLETED"}
-{"timestamp": 1750536932.3662052, "level": "INFO", "script_name": "UNKNOWN", "message": "\ud83d\udc4b Closing the browser..."}
-{"timestamp": 1750537288.849232, "level": "INFO", "script_name": "UNKNOWN", "message": "====== WebDriver manager ======"}
-{"timestamp": 1750537290.5825226, "level": "INFO", "script_name": "UNKNOWN", "message": "Get LATEST chromedriver version for google-chrome"}
-{"timestamp": 1750537290.9767845, "level": "INFO", "script_name": "UNKNOWN", "message": "Get LATEST chromedriver version for google-chrome"}
-{"timestamp": 1750537291.3420544, "level": "INFO", "script_name": "UNKNOWN", "message": "Driver [C:\\Users\\HP\\.wdm\\drivers\\chromedriver\\win64\\137.0.7151.119\\chromedriver-win32/chromedriver.exe] found in cache"}
-{"timestamp": 1750537292.790582, "level": "INFO", "script_name": "UNKNOWN", "message": "\u25b6 Starting login process..."}
-{"timestamp": 1750537293.9630077, "level": "INFO", "script_name": "UNKNOWN", "message": "\u2709 Entering email..."}
-{"timestamp": 1750537294.6160815, "level": "INFO", "script_name": "UNKNOWN", "message": "\ud83d\udd11 Entering password..."}
-{"timestamp": 1750537294.7111113, "level": "INFO", "script_name": "UNKNOWN", "message": "-> Clicking login button..."}
-{"timestamp": 1750537294.7985597, "level": "INFO", "script_name": "UNKNOWN", "message": "\ud83d\udd10 Logged in, waiting for dashboard to load..."}
-{"timestamp": 1750537299.0632005, "level": "INFO", "script_name": "UNKNOWN", "message": "\u2705 Login successful, dashboard loaded."}
-{"timestamp": 1750537299.06331, "level": "INFO", "script_name": "UNKNOWN", "message": "\n\ud83d\udda5\ufe0f Navigating to 'My Desk' section..."}
-{"timestamp": 1750537299.1585946, "level": "INFO", "script_name": "UNKNOWN", "message": "\u2705 Clicked on My Desk sidebar link."}
-{"timestamp": 1750537301.1593986, "level": "INFO", "script_name": "UNKNOWN", "message": "\n\ud83d\udc1d Clicking on 'Spelling Bee' activity..."}
-{"timestamp": 1750537301.2565272, "level": "INFO", "script_name": "UNKNOWN", "message": "\u2705 Clicked on Spelling Bee activity."}
-{"timestamp": 1750537303.2572072, "level": "INFO", "script_name": "UNKNOWN", "message": "\n\ud83d\udd0e Handling 'Class' dropdown..."}
-{"timestamp": 1750537303.3593462, "level": "INFO", "script_name": "UNKNOWN", "message": "\ud83c\udf93 Class 'math grade 5 (2 students)' selected successfully."}
-{"timestamp": 1750537304.3604577, "level": "INFO", "script_name": "UNKNOWN", "message": "\n\ud83d\udd0e Handling 'Difficulty' dropdown..."}
-{"timestamp": 1750537304.5030878, "level": "INFO", "script_name": "UNKNOWN", "message": "\ud83d\udcd8 Difficulty 'Grade 4-6 (Medium)' selected successfully."}
-{"timestamp": 1750537305.504681, "level": "INFO", "script_name": "UNKNOWN", "message": "\n\ud83d\ude80 Clicking 'Assign to Class' button..."}
-{"timestamp": 1750537305.6109688, "level": "INFO", "script_name": "UNKNOWN", "message": "\u2705 Assignment successfully created!"}
-{"timestamp": 1750537308.611736, "level": "INFO", "script_name": "UNKNOWN", "message": "\ud83c\udfaf Automation script finished successfully.", "status": "COMPLETED"}
-{"timestamp": 1750537308.611736, "level": "INFO", "script_name": "UNKNOWN", "message": "\ud83d\udc4b Closing the browser..."}
+{"timestamp": 1750537688.2568955, "level": "INFO", "script_name": "UNKNOWN", "message": "====== WebDriver manager ======"}
+{"timestamp": 1750537690.104793, "level": "INFO", "script_name": "UNKNOWN", "message": "Get LATEST chromedriver version for google-chrome"}
+{"timestamp": 1750537690.4749944, "level": "INFO", "script_name": "UNKNOWN", "message": "Get LATEST chromedriver version for google-chrome"}
+{"timestamp": 1750537690.82524, "level": "INFO", "script_name": "UNKNOWN", "message": "Driver [C:\\Users\\HP\\.wdm\\drivers\\chromedriver\\win64\\137.0.7151.119\\chromedriver-win32/chromedriver.exe] found in cache"}
+{"timestamp": 1750537692.3643656, "level": "INFO", "script_name": "UNKNOWN", "message": "\u25b6 Starting login process..."}
+{"timestamp": 1750537692.66156, "level": "INFO", "script_name": "UNKNOWN", "message": "\u2709 Entering email..."}
+{"timestamp": 1750537694.33416, "level": "INFO", "script_name": "UNKNOWN", "message": "\ud83d\udd11 Entering password..."}
+{"timestamp": 1750537694.4106693, "level": "INFO", "script_name": "UNKNOWN", "message": "-> Clicking login button..."}
+{"timestamp": 1750537694.496943, "level": "INFO", "script_name": "UNKNOWN", "message": "\ud83d\udd10 Logged in, waiting for dashboard to load..."}
+{"timestamp": 1750537698.659779, "level": "INFO", "script_name": "UNKNOWN", "message": "\u2705 Login successful, dashboard loaded."}
+{"timestamp": 1750537698.6599512, "level": "INFO", "script_name": "UNKNOWN", "message": "\n\ud83d\udda5\ufe0f Navigating to 'My Desk' section..."}
+{"timestamp": 1750537698.814124, "level": "INFO", "script_name": "UNKNOWN", "message": "\u2705 Clicked on My Desk sidebar link."}
+{"timestamp": 1750537700.8144283, "level": "INFO", "script_name": "UNKNOWN", "message": "\n\ud83d\udc1d Clicking on 'Spelling Bee' activity..."}
+{"timestamp": 1750537700.9043677, "level": "INFO", "script_name": "UNKNOWN", "message": "\u2705 Clicked on Spelling Bee activity."}
+{"timestamp": 1750537702.9047134, "level": "INFO", "script_name": "UNKNOWN", "message": "\n\ud83d\udd0e Handling 'Class' dropdown..."}
+{"timestamp": 1750537703.0328553, "level": "INFO", "script_name": "UNKNOWN", "message": "\ud83c\udf93 Class 'math grade 5 (2 students)' selected successfully."}
+{"timestamp": 1750537704.0334444, "level": "INFO", "script_name": "UNKNOWN", "message": "\n\ud83d\udd0e Handling 'Difficulty' dropdown..."}
+{"timestamp": 1750537704.1431444, "level": "INFO", "script_name": "UNKNOWN", "message": "\ud83d\udcd8 Difficulty 'Grade 4-6 (Medium)' selected successfully."}
+{"timestamp": 1750537705.143547, "level": "INFO", "script_name": "UNKNOWN", "message": "\n\ud83d\ude80 Clicking 'Assign to Class' button..."}
+{"timestamp": 1750537705.2405546, "level": "INFO", "script_name": "UNKNOWN", "message": "\u2705 Assignment successfully created!"}
+{"timestamp": 1750537708.2413194, "level": "INFO", "script_name": "UNKNOWN", "message": "\ud83c\udfaf Automation script finished successfully.", "status": "COMPLETED"}
+{"timestamp": 1750537708.2413194, "level": "INFO", "script_name": "UNKNOWN", "message": "\ud83d\udc4b Closing the browser..."}
