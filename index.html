@@ -139,16 +139,16 @@
                         const timestamp = new Date(logEntry.timestamp * 1000).toLocaleString(); // Convert epoch to human readable
 
                         div.innerHTML = `
-                            <div>
-                                <span class="log-timestamp">${timestamp}</span>
-                                <span class="log-level <span class="math-inline">\{levelClass\}"\></span>{logEntry.level}</span>
-                                <span class="log-message">${logEntry.message}</span>
-                                <span class="log-script">(Script: ${logEntry.script_name})</span>
-                            </div>
-                            ${logEntry.status ? `<div style="margin-top: 5px;"><span style="font-weight: bold;">Status:</span> ${logEntry.status}</div>` : ''}
-                            ${logEntry.screenshot ? `<div style="margin-top: 5px;"><span style="font-weight: bold;">Screenshot:</span> <a href="/${logEntry.screenshot}" target="_blank">${logEntry.screenshot}</a></div>` : ''}
-                            ${logEntry.traceback ? `<pre>${logEntry.traceback}</pre>` : ''}
-                        `;
+    <div>
+        <span class="log-timestamp">${timestamp}</span>
+        <span class="log-level <span class="math-inline">\{levelClass\}"\></span>{logEntry.level}</span> <span class="log-message">${logEntry.message}</span>
+        <span class="log-script">(Script: ${logEntry.script_name})</span>
+    </div>
+    ${logEntry.status ? `<div style="margin-top: 5px;"><span style="font-weight: bold;">Status:</span> ${logEntry.status}</div>` : ''}
+    ${logEntry.screenshot ? `<div style="margin-top: 5px;"><span style="font-weight: bold;">Screenshot:</span> <a href="/${logEntry.screenshot}" target="_blank">${logEntry.screenshot}</a></div>` : ''}
+    ${logEntry.traceback ? `<pre>${logEntry.traceback}</pre>` : ''}
+`;
+// ... rest of the code ...
                         logsContainer.appendChild(div);
                     } catch (jsonParseError) {
                         console.error('Error parsing JSON line:', line, jsonParseError);
