@@ -1,86 +1,71 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Selenium Bot Automation Logs</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Font - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f8f8f8; color: #333; }
-        .container { max-width: 1200px; margin: 0 auto; background-color: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        h1 { color: #0056b3; text-align: center; margin-bottom: 25px; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* Light gray background */
+            color: #333;
+        }
+        .container {
+            max-width: 1000px; /* Slightly wider container */
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: #ffffff;
+            border-radius: 0.75rem; /* More rounded corners */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* Enhanced shadow */
+        }
         .log-entry {
-            border-bottom: 1px solid #eee;
-            padding: 10px 0;
-            margin-bottom: 10px;
+            background-color: #fcfdfe; /* Slightly off-white for entries */
+            border: 1px solid #e0e7ff; /* Light blue border */
+            border-radius: 0.5rem;
+            padding: 1.25rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); /* Subtle shadow for entries */
         }
-        .log-entry:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-        }
-        .log-level {
-            font-weight: bold;
-            margin-right: 10px;
-            display: inline-block;
-            min-width: 70px; /* Align levels */
-            text-transform: uppercase;
-        }
-        .level-info { color: #28a745; }
-        .level-warning { color: #ffc107; }
-        .level-error { color: #dc3545; }
-        .level-critical { color: #6f42c1; }
-        .level-debug { color: #17a2b8; }
-        .log-timestamp { color: #6c757d; font-size: 0.9em; margin-right: 15px; }
-        .log-message { display: inline-block; }
-        .log-script { font-style: italic; color: #5a5a5a; font-size: 0.85em; margin-left: 10px;}
+        /* Specific styling for log levels */
+        .log-entry.info { border-left: 5px solid #22c55e; } /* Green for INFO */
+        .log-entry.warning { border-left: 5px solid #facc15; } /* Yellow for WARNING */
+        .log-entry.error { border-left: 5px solid #ef4444; } /* Red for ERROR */
+        .log-entry.critical { border-left: 5px solid #8b5cf6; } /* Purple for CRITICAL */
+        .log-entry.debug { border-left: 5px solid #3b82f6; } /* Blue for DEBUG */
+
+        .log-level-text.info { color: #22c55e; }
+        .log-level-text.warning { color: #facc15; }
+        .log-level-text.error { color: #ef4444; }
+        .log-level-text.critical { color: #8b5cf6; }
+        .log-level-text.debug { color: #3b82f6; }
+
         pre {
-            background-color: #f4f4f4;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+            background-color: #e5e7eb; /* Lighter gray for preformatted text */
+            padding: 0.75rem;
+            border-radius: 0.5rem;
             overflow-x: auto;
-            white-space: pre-wrap; /* Wrap long lines */
-            word-wrap: break-word; /* Break long words */
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 0.85em;
-            margin-top: 5px;
-        }
-        .refresh-button {
-            display: block;
-            width: fit-content;
-            margin: 20px auto;
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1em;
-        }
-        .refresh-button:hover {
-            background-color: #0056b3;
-        }
-        #loading-indicator {
-            text-align: center;
-            margin-top: 20px;
-            font-style: italic;
-            color: #888;
-        }
-        .footer {
-            text-align: center;
-            margin-top: 30px;
-            font-size: 0.8em;
-            color: #888;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: 'Fira Code', 'Courier New', Courier, monospace; /* Monospace for code/traceback */
+            font-size: 0.8rem;
+            line-height: 1.4;
+            color: #4b5563;
+            margin-top: 0.75rem;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>📊 Selenium Bot Performance Logs</h1>
-        <button class="refresh-button" onclick="fetchLogs()">Refresh Logs</button>
-        <div id="loading-indicator">Loading logs...</div>
-        <div id="logs-container"></div>
-        <div class="footer">
+        <h1 class="text-4xl font-extrabold text-center text-blue-800 mb-8">📊 Selenium Bot Performance Logs</h1>
+        <button class="refresh-button bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg shadow-md transition duration-300 ease-in-out block mx-auto mb-8" onclick="fetchLogs()">Refresh Logs</button>
+        <div id="loading-indicator" class="text-center text-gray-500 italic mb-4">Loading logs...</div>
+        <div id="logs-container" class="space-y-6">
+            <!-- Logs will be loaded here -->
+        </div>
+        <div class="footer text-center text-gray-500 text-sm mt-10">
             <p>Last updated: <span id="last-updated">N/A</span></p>
             <p>Logs are generated by Selenium automation scripts.</p>
         </div>
@@ -96,73 +81,91 @@
             loadingIndicator.style.display = 'block'; // Show loading indicator
 
             try {
-                // Adjust this path if automation_logs_jsonl is in a subfolder (e.g., /logs/automation_logs_jsonl)
-                const response = await fetch('/automation_logs_jsonl');
+                // Fetch the log file (corrected to .json extension as per Python script output)
+                const response = await fetch('automation_logs.json');
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const text = await response.text();
+                // Split by newline to get individual JSON objects (JSON Lines format)
                 const lines = text.split('\n').filter(line => line.trim() !== '');
 
                 if (lines.length === 0) {
-                    logsContainer.innerHTML = '<p style="text-align: center; padding: 20px;">No log entries found.</p>';
+                    logsContainer.innerHTML = '<p class="text-center p-5 text-gray-500">No log entries found.</p>';
                     return;
                 }
 
-                lines.forEach(line => {
+                let logs = [];
+                for (const line of lines) {
                     try {
-                        const logEntry = JSON.parse(line);
-                        const div = document.createElement('div');
-                        div.className = 'log-entry';
-
-                        let levelClass = '';
-                        switch (logEntry.level) {
-                            case 'INFO':
-                                levelClass = 'level-info';
-                                break;
-                            case 'WARNING':
-                                levelClass = 'level-warning';
-                                break;
-                            case 'ERROR':
-                                levelClass = 'level-error';
-                                break;
-                            case 'CRITICAL':
-                                levelClass = 'level-critical';
-                                break;
-                            case 'DEBUG':
-                                levelClass = 'level-debug';
-                                break;
-                            default:
-                                levelClass = '';
-                        }
-
-                        const timestamp = new Date(logEntry.timestamp * 1000).toLocaleString(); // Convert epoch to human readable
-
-                        div.innerHTML = `
-    <div>
-        <span class="log-timestamp">${timestamp}</span>
-        <span class="log-level <span class="math-inline">\{levelClass\}"\></span>{logEntry.level}</span> <span class="log-message">${logEntry.message}</span>
-        <span class="log-script">(Script: ${logEntry.script_name})</span>
-    </div>
-    ${logEntry.status ? `<div style="margin-top: 5px;"><span style="font-weight: bold;">Status:</span> ${logEntry.status}</div>` : ''}
-    ${logEntry.screenshot ? `<div style="margin-top: 5px;"><span style="font-weight: bold;">Screenshot:</span> <a href="/${logEntry.screenshot}" target="_blank">${logEntry.screenshot}</a></div>` : ''}
-    ${logEntry.traceback ? `<pre>${logEntry.traceback}</pre>` : ''}
-`;
-// ... rest of the code ...
-                        logsContainer.appendChild(div);
+                        logs.push(JSON.parse(line));
                     } catch (jsonParseError) {
                         console.error('Error parsing JSON line:', line, jsonParseError);
-                        const div = document.createElement('div');
-                        div.className = 'log-entry';
-                        div.innerHTML = `<p style="color: red;">Error parsing log line: ${line}</p>`;
-                        logsContainer.appendChild(div);
+                        // Add a fallback for malformed lines in the display
+                        const errorDiv = document.createElement('div');
+                        errorDiv.className = 'log-entry error p-4 rounded-lg shadow-sm';
+                        errorDiv.innerHTML = `<p class="text-red-600">Error parsing log line: <pre>${line}</pre></p>`;
+                        logsContainer.appendChild(errorDiv);
+                    }
+                }
+
+                // Sort logs by timestamp (newest first)
+                logs.sort((a, b) => {
+                    // Assuming 'asctime' is in a format that can be parsed by Date
+                    return new Date(b.asctime) - new Date(a.asctime);
+                });
+
+                logs.forEach((log, index) => {
+                    const div = document.createElement('div');
+                    div.className = `log-entry ${log.levelname.toLowerCase()}`; // Add class for level styling
+
+                    let content = `
+                        <div class="flex items-center text-xs text-gray-500 mb-2">
+                            <span class="mr-3">${log.asctime}</span>
+                            <span class="log-level-text ${log.levelname.toLowerCase()} font-bold uppercase">${log.levelname}</span>
+                            <span class="ml-auto italic text-gray-600">(Script: ${log.name})</span>
+                        </div>
+                        <p class="text-base font-medium text-gray-800 mb-1">${log.message}</p>
+                    `;
+
+                    if (log.activity) {
+                        content += `<p class="text-sm text-gray-600"><span class="font-semibold">Activity:</span> ${log.activity}</p>`;
+                    }
+                    if (log.step) {
+                        content += `<p class="text-sm text-gray-600"><span class="font-semibold">Step:</span> ${log.step}</p>`;
+                    }
+                    if (log.status) {
+                        content += `<p class="text-sm text-gray-600"><span class="font-semibold">Status:</span> <span class="capitalize ${log.status === 'success' ? 'text-green-600' : 'text-red-600'}">${log.status}</span></p>`;
+                    }
+                    if (log.error_message) {
+                        content += `<p class="text-red-500 text-sm mt-2"><span class="font-semibold">Error Message:</span> ${log.error_message}</p>`;
+                    }
+                    if (log.warning_message) {
+                        content += `<p class="text-yellow-600 text-sm mt-2"><span class="font-semibold">Warning Message:</span> ${log.warning_message}</p>`;
+                    }
+                    if (log.screenshot) {
+                        content += `<p class="text-sm mt-2"><span class="font-semibold">Screenshot:</span> <a href="/${log.screenshot}" target="_blank" class="text-blue-500 hover:underline">${log.screenshot}</a></p>`;
+                    }
+                    if (log.traceback) {
+                        content += `<pre>${log.traceback}</pre>`;
+                    }
+
+                    div.innerHTML = content;
+                    logsContainer.appendChild(div);
+
+                    // Add a separator after each log entry, except the very last one
+                    if (index < logs.length - 1) {
+                        const separator = document.createElement('div');
+                        separator.className = 'border-b-2 border-dashed border-gray-300 my-6'; // Dashed line separator with margin
+                        logsContainer.appendChild(separator);
                     }
                 });
+
                 lastUpdatedSpan.textContent = new Date().toLocaleString();
 
             } catch (error) {
                 console.error('Failed to fetch logs:', error);
-                logsContainer.innerHTML = '<p style="color: red; text-align: center; padding: 20px;">Failed to load logs. Please try again later.</p>';
+                logsContainer.innerHTML = '<p class="text-center p-5 text-red-600">Failed to load logs. Please ensure <code>automation_logs.json</code> exists and is accessible. Error: ' + error.message + '</p>';
             } finally {
                 loadingIndicator.style.display = 'none'; // Hide loading indicator
             }
@@ -170,6 +173,9 @@
 
         // Fetch logs on page load
         document.addEventListener('DOMContentLoaded', fetchLogs);
+
+        // Optional: Auto-refresh logs every X seconds (e.g., 10 seconds)
+        setInterval(fetchLogs, 10000); // Refreshes every 10 seconds
     </script>
 </body>
 </html>
